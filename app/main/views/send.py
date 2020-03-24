@@ -289,7 +289,10 @@ def get_sender_details(service_id, template_type):
 @main.route("/services/<service_id>/send/<template_id>/test", endpoint='send_test')
 @main.route("/services/<service_id>/send/<template_id>/one-off", endpoint='send_one_off')
 @user_has_permissions('send_messages', restrict_admin_usage=True)
+# SJA send_test here
 def send_test(service_id, template_id):
+
+    print("---- SJA send_test request.endpoint=", request.endpoint)
     session['recipient'] = None
     session['placeholders'] = {}
     session['send_test_letter_page_count'] = None
@@ -340,6 +343,9 @@ def get_notification_check_endpoint(service_id, template):
 )
 @user_has_permissions('send_messages', restrict_admin_usage=True)
 def send_test_step(service_id, template_id, step_index):
+
+    print("---- SJA send_test_step, step_index=", step_index)
+
     if {'recipient', 'placeholders'} - set(session.keys()):
         return redirect(url_for(
             {
@@ -379,7 +385,9 @@ def send_test_step(service_id, template_id, step_index):
         template,
         prefill_current_user=(request.endpoint == 'main.send_test_step'),
     )
-
+    print("---- SJA placeholders=", placeholders)
+    # if request.endpoint == 'main.send_test':
+    #     step_index = step_index + 1
     try:
         current_placeholder = placeholders[step_index]
     except IndexError:
@@ -419,6 +427,8 @@ def send_test_step(service_id, template_id, step_index):
         if all_placeholders_in_session(placeholders):
             return get_notification_check_endpoint(service_id, template)
 
+        print("---- SJA Increment step_index to", step_index + 1)
+
         return redirect(url_for(
             request.endpoint,
             service_id=service_id,
@@ -446,6 +456,8 @@ def send_test_step(service_id, template_id, step_index):
             type = _l("email address")
         elif(type == "phone number"):
             type = _l("phone number")
+
+# SJA this is the Use my email address button
 
         skip_link = (
             '{} {}'.format(_l("Use my"), type),
@@ -738,7 +750,9 @@ def fields_to_fill_in(template, prefill_current_user=False):
         session['recipient'] = current_user.email_address
         session['placeholders']['email address'] = current_user.email_address
 
-    return list(template.placeholders)
+    # SJA changed this
+    # return list(template.placeholders)
+    return recipient_columns + list(template.placeholders)
 
 
 def get_normalised_placeholders_from_session():
@@ -875,7 +889,7 @@ def _check_notification(service_id, template_id, exception=None):
         page_count=get_page_count_for_letter(db_template),
     )
 
-    back_link = get_back_link(service_id, template, len(fields_to_fill_in(template)) - 1)
+    back_link = get_back_link(service_id, template, len(fields_to_fill_in(template)))
 
     if (
         (
