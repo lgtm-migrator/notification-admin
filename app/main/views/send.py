@@ -386,6 +386,10 @@ def send_test_step(service_id, template_id, step_index):
         prefill_current_user=(request.endpoint == 'main.send_test_step'),
     )
     print("---- SJA placeholders=", placeholders)
+    if session.get('prefill_current_user') and step_index == 0:
+        session['prefill_current_user'] = False
+        step_index = 1
+
     # if request.endpoint == 'main.send_test':
     #     step_index = step_index + 1
     try:
@@ -743,6 +747,9 @@ def fields_to_fill_in(template, prefill_current_user=False):
 
     if 'letter' == template.template_type or not prefill_current_user:
         return recipient_columns + list(template.placeholders)
+
+    print("---- SJA prefilling current user")
+    session['prefill_current_user'] = True
     if template.template_type == 'sms':
         session['recipient'] = current_user.mobile_number
         session['placeholders']['phone number'] = current_user.mobile_number
@@ -888,6 +895,8 @@ def _check_notification(service_id, template_id, exception=None):
         ),
         page_count=get_page_count_for_letter(db_template),
     )
+
+    print("---- SJA fields to fill in:", fields_to_fill_in(template))
 
     back_link = get_back_link(service_id, template, len(fields_to_fill_in(template)))
 
