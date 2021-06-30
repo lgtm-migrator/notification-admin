@@ -510,6 +510,12 @@ class ServiceAPIClient(NotifyAdminAPIClient):
     def has_accepted_tos(self, service_id):
         return redis_client.get(self._tos_key_name(service_id)) is not None
 
+    def decline_tos(self, service_id):
+        if not current_app.config["REDIS_ENABLED"]:
+            raise NotImplementedError("Cannot decline ToS without using Redis")
+        current_app.logger.info(f"Terms of use declined by user {current_user.id} for service {service_id}")
+        redis_client.delete(self._tos_key_name(service_id))
+
     def accept_tos(self, service_id):
         if not current_app.config["REDIS_ENABLED"]:
             raise NotImplementedError("Cannot accept ToS without using Redis")

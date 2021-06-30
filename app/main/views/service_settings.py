@@ -231,7 +231,8 @@ def request_to_go_live(service_id):
 @user_is_gov_user
 def terms_of_use(service_id):
     if request.method == "POST":
-        service_api_client.accept_tos(service_id)
+        service_api_client.accept_tos(service_id) # SJA this is setting tos on any post
+        # service_api_client.decline_tos(service_id) # SJA this is setting tos on any post
         return redirect(url_for(".request_to_go_live", service_id=service_id))
 
     return render_template("views/service-settings/terms-of-use.html")
