@@ -41,6 +41,8 @@ def printMissingKeys(name, keys):
         print("\n----- " + name)  # noqa: T001
         for k in keys:
             print(k)  # noqa: T001
+    else:
+        print("\nNo missing strings!")
 
 
 if __name__ == "__main__":
