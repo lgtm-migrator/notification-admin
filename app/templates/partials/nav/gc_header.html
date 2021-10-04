@@ -1,10 +1,10 @@
 {% from "components/buttons.html" import nav_button %}
 
-{% set lang_switch = 'EN' %}
+{% set lang_switch = 'en-ca' %}
 {% set long_lang_switch = 'English' %}
 
 {% if session["userlang"] == "en" %}
-  {% set lang_switch = 'FR' %}
+  {% set lang_switch = 'fr-ca' %}
   {% set long_lang_switch = 'Français' %}
 {% endif %}
 
