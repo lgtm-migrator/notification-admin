@@ -1,27 +1,29 @@
 {% from "components/big-number.html" import big_number %}
 
-{% macro mapping_table(caption='', field_headings=[], field_headings_visible=True, caption_visible=True, equal_length=False) -%}
-  <table class="table table-font-xsmall">
-    <caption class="heading-medium table-heading{{ ' visuallyhidden' if not caption_visible}}">
-      {{ caption }}
-    </caption>
-    <thead class="table-field-headings{% if field_headings_visible %}-visible{% endif %}">
-      <tr>
-        {% for field_heading in field_headings %}
-          <th scope="col" class="table-field-heading{% if loop.first and not equal_length %}-first{% endif %}{% if not field_headings_visible %} border-0{% endif %}" width="{% if equal_length %}{{ (100 / field_headings|length)|int }}%{% endif %}">
-            {% if field_headings_visible %}
-              {{ field_heading }}
-            {% else %}
-              <span class="visuallyhidden">{{ field_heading }}</span>
-            {% endif %}
-          </th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {{ caller() }}
-    </tbody>
-  </table>
+{% macro mapping_table(caption='', field_headings=[], field_headings_visible=True, caption_visible=True, equal_length=False, labelledby='') -%}
+  <div role="region" aria-labelledby="{{ labelledby or caption | lower | replace(' ', '-') }}" tabindex="0">
+    <table class="table table-font-xsmall">
+      <caption id="{{ labelledby or caption | lower | replace(' ', '-') }}" class="heading-medium table-heading{{ ' visuallyhidden' if not caption_visible}}">
+        {{ caption }}
+      </caption>
+      <thead class="table-field-headings{% if field_headings_visible %}-visible{% endif %}">
+        <tr>
+          {% for field_heading in field_headings %}
+            <th scope="col" class="table-field-heading{% if loop.first and not equal_length %}-first{% endif %}{% if not field_headings_visible %} border-0{% endif %}" width="{% if equal_length %}{{ (100 / field_headings|length)|int }}%{% endif %}">
+              {% if field_headings_visible %}
+                {{ field_heading }}
+              {% else %}
+                <span class="visuallyhidden">{{ field_heading }}</span>
+              {% endif %}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {{ caller() }}
+      </tbody>
+    </table>
+  </div>
 {%- endmacro %}
 
 {% macro list_table(items, caption='', empty_message='', field_headings=[], field_headings_visible=True, caption_visible=True, equal_length=False) -%}

@@ -42,6 +42,16 @@
     @apply text-small leading-tight;
   }
 
+  /* UNDERENGINEERED RESPONSIVE TABLES */
+
+  [role="region"][aria-labelledby][tabindex] {
+    overflow: auto;
+  }
+
+  [role="region"][aria-labelledby][tabindex]:focus {
+    outline: 3px solid rgba(255, 191, 71, 1);
+  }
+
   /* NOTIFY TABLE STYLES */
   /*! purgecss start ignore */
 

@@ -49,6 +49,7 @@
   </div>
 
   {% call mapping_table(
+    caption=_('Notifications sent over time'),
     field_headings=[
       _('Month'),
       _('Total'),
@@ -57,7 +58,8 @@
     ],
     field_headings_visible=True,
     equal_length=True,
-    caption_visible=False
+    caption_visible=False,
+    labelledby='activity'
   ) %}
 
     {% for month, data in monthly_stats.items() %}
