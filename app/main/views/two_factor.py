@@ -8,6 +8,7 @@ from app.main import main
 from app.main.forms import TwoFactorForm
 from app.models.user import User
 from app.utils import redirect_to_sign_in
+from config.mixpanel import track_mixpanel_event, track_mixpanel_user_profile
 
 
 @main.route("/two-factor-email-sent", methods=["GET", "POST"])
@@ -75,6 +76,8 @@ def _is_safe_redirect_url(target):
     return redirect_url.scheme in ("http", "https") and host_url.netloc == redirect_url.netloc
 
 
+@track_mixpanel_user_profile
+@track_mixpanel_event
 def log_in_user(user_id):
     try:
         user = User.from_id(user_id)
