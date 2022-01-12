@@ -15,5 +15,20 @@ services:
         flask run -p 6012 --host=0.0.0.0"
     volumes:
       - .:/app
+    networks:
+      - notify
     ports:
         - "6012:6012"
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - "6379:6379"
+    networks:
+      - notify
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+networks:
+  notify:
+    driver: bridge
