@@ -10,7 +10,7 @@ jobs:
       - name: "Checkout Repository"
         uses: actions/checkout@v2
 
-      - name: "Set ci flag from commit"
+      - name: "Set CI flag from commit"
         env:
           COMMIT_VAR: ${{ contains(github.event.head_commit.message, '[skip ci]') }}
         run: |
